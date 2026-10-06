@@ -1,48 +1,84 @@
 # Signalboard Lead Intelligence
 
-## What the app does
+Signalboard is a React + Vite AI-style lead scoring interface that turns three lead inputs into a transparent, structured local simulation. No live production URL is claimed yet: **Live URL:** `[add the Netlify URL after deployment]`.
 
-Signalboard is a React + Vite AI-style lead scoring interface. It collects a company name, company size, and buying intent, then simulates a structured local tool request. The result is a readable Lead Score Card with a score out of 100, tier, recommended next action, and reasons. There is no API key, database, or external request.
+## Features
 
-## Run locally
+- Company name, company size, and intent form.
+- Structured Lead Score Card with score, tier, next action, and reasons.
+- Loading, success, empty, cancelled, retry, and designed error states.
+- Simulated `error`, `rate`, `slow`, and `midstream` scenarios.
+- Stop control, Retry control, maximum input length, duplicate-submit protection, and a short client-side cooldown.
+- Responsive layout, semantic form controls, visible focus states, polite live regions, and reduced-motion support.
+
+## Screenshots
+
+No screenshots are included yet. After running the app locally or deploying it, capture the normal result, loading/Stop state, and an error state at desktop and mobile widths. Save real images in a `screenshots/` folder and update this section with their paths; do not use placeholder or invented screenshots.
+
+## Tech stack
+
+React, Vite, plain CSS, and browser APIs (`AbortController` and timers). There is no external AI API, database, authentication, or API key.
+
+## Local setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL printed by Vite. For a production check:
+For a production build preview:
 
 ```bash
 npm run build
 npm run preview
 ```
 
+## Environment variables
+
+No environment variables required.
+
+## Architecture
+
+`src/main.jsx` mounts the app. `src/App.jsx` owns form state, the local abortable tool simulation, cooldown, retry, and stop behavior. `src/components/ToolLifecycle.jsx` selects the idle, loading, output, and error presentation. `src/components/LeadScoreCard.jsx` renders the structured result. `src/App.css` contains the responsive visual system.
+
 ## Tool contract
 
-- Tool name: `scoreLead`
-- Input: `{ company: string, size: "Startup" | "Mid-market" | "Enterprise", intent: "Low" | "Medium" | "High" }`
-- Return shape: `{ score: number, tier: string, action: string, reasons: string[] }`
+Tool name: `scoreLead`
+
+Input: `{ company: string, size: "Startup" | "Mid-market" | "Enterprise", intent: "Low" | "Medium" | "High" }`
+
+Return shape: `{ score: number, tier: string, action: string, reasons: string[] }`
 
 The request is simulated locally with an abortable timer. Stop cancels it, and Retry resends the same submitted details.
 
-## Test each state
+## Production-safety measures
 
-- Use an ordinary company name for the success result.
-- Use `error` for a designed service error.
-- Use `rate` for a rate-limit error.
-- Use `slow` to see the loading state for longer.
-- Use `midstream` for a connection-ended error.
-- While `slow` is loading, use Stop. Then use Retry on an error card to resend the same details.
+- Company input is capped at 120 characters.
+- Submissions are ignored while a request is loading.
+- A 1.2-second client-side cooldown prevents rapid repeated submissions.
+- `AbortController` cancels the simulated request when Stop is pressed.
+- The app only simulates AI locally; it cannot drain API credits because it makes no external AI calls.
+- No server-side rate limiting or request timeout is applicable because there is no external API or server endpoint.
+
+## Known limitations
+
+Scores are illustrative local outputs, not validated business predictions. There is no persistence, authentication, real AI model, backend rate limiting, or production URL yet. Lighthouse scores and real-device browser checks remain to be run after deployment.
+
+## How AI tools helped build this
+
+AI assistance helped scaffold the React/Vite structure, draft lifecycle components and responsive CSS, and reason through local error simulations and cancellation. I personally checked the source behavior, kept the tool local with no API credentials, reviewed accessibility requirements, ran `npm run build`, and documented limitations instead of claiming deployment or audit results.
 
 ## Deploy on Netlify
 
-1. Push this repository to GitHub and import it into Netlify, or connect the repository from the Netlify dashboard.
-2. Set the build command to `npm run build`.
-3. Set the publish directory to `dist`.
-   These settings are also included in `netlify.toml`.
-4. Deploy the site and test each input state on the live URL.
+1. Push the repository to GitHub.
+2. In Netlify, choose **Add new site → Import an existing project** and select the repository.
+3. Use build command `npm run build` and publish directory `dist`.
+4. Deploy, then record the real URL above and test the production states.
 
-This project has not been deployed or audited here.
+## Testing the states
 
-# waveee
+- Normal: enter any ordinary company name, choose size and intent, and select **Score this lead**.
+- Error: use company name `error`.
+- Rate: use company name `rate`.
+- Slow: use company name `slow`, then test **Stop** while it loads.
+- Midstream: use company name `midstream`, then test **Retry** on the error card.
