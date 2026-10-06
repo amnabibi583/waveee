@@ -40,6 +40,7 @@ The request is simulated locally with an abortable timer. Stop cancels it, and R
 1. Push this repository to GitHub and import it into Netlify, or connect the repository from the Netlify dashboard.
 2. Set the build command to `npm run build`.
 3. Set the publish directory to `dist`.
+   These settings are also included in `netlify.toml`.
 4. Deploy the site and test each input state on the live URL.
 
 This project has not been deployed or audited here.
