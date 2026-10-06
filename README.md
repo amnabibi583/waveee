@@ -83,6 +83,19 @@ AI assistance helped scaffold the React/Vite structure, draft lifecycle componen
 - Slow: use company name `slow`, then test **Stop** while it loads.
 - Midstream: use company name `midstream`, then test **Retry** on the error card.
 
+## Automated tests
+
+```bash
+npm install
+npm test
+npm run test:watch
+npm run test:coverage
+npx playwright install --with-deps chromium
+npm run test:e2e
+```
+
+Vitest runs seven React Testing Library tests for validation, loading and duplicate-submit protection, successful mocked AI output, API error, retry, cancellation, and the structured Lead Score Card. Unit tests mock the Netlify function with `fetch`; they never call Claude. Playwright intercepts the function route and tests the real form-to-score-card flow without external API access.
+
 ## Claude API setup
 
 The frontend calls `/.netlify/functions/score-lead`. The Netlify function keeps `ANTHROPIC_API_KEY` server-side and validates both input and Claude's JSON response. The browser never receives the key.

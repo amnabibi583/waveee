@@ -1,1 +1,10 @@
-{"name":"signalboard-lead-intelligence","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"dependencies":{"@vitejs/plugin-react":"latest","vite":"latest","react":"latest","react-dom":"latest"},"devDependencies":{}}
+{
+  "name": "signalboard-lead-intelligence",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "dev": "vite", "build": "vite build", "preview": "vite preview", "test": "vitest run", "test:watch": "vitest", "test:coverage": "vitest run --coverage", "test:e2e": "playwright test" },
+  "dependencies": { "@vitejs/plugin-react": "latest", "vite": "latest", "react": "latest", "react-dom": "latest" },
+  "devDependencies": { "vitest": "latest", "@testing-library/react": "latest", "@testing-library/jest-dom": "latest", "@testing-library/user-event": "latest", "jsdom": "latest", "@playwright/test": "latest", "@vitest/coverage-v8": "latest" }
+}
